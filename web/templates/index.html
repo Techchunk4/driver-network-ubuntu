@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🛜</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .status-badge {
+      padding: 0.25em 0.6em;
+      border-radius: 10rem;
+      font-size: 0.85em;
+    }
+
+    .status-ok {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .status-domn {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .log-entry {
+      font-family: monospace;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .header-bar {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .health-summary {
+      background-color: #e9ecef;
+      border-radius: 0.25rem;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .recent-logs {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container py-4">
+    <div class="header-bar">
+      <div class="d-flex justify-content-between align-items-center">
+        <h1 class="h3 mb-0">Driver Network Health Monitor</h1>
+        <div class="text-muted">
+          Last updated: <strong>{{ last_updated }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="health-summary">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <h5 class="card-title">Total Hosts</h5>
+              <p class="display-4">{{ total_hosts }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Operational</h5>
+              <p class="display-4">{{ ok_count }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card bg-danger text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Down</h5>
+              <p class="display-4">{{ down_count }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+          <h2 class="h5 mb-0">Recent Connectivity Logs</h2>
+          <span>Showing last 15 entries</span>
+        </div>
+      </div>
+      <div class="card-body p-0 recent-logs">
+        {% if logs %}
+        {% for log in logs %}
+        <div class="log-entry">
+          <div class="d-flex justify-content-between">
+            <span class="timestamp">{{ log.timestamp }}</span>
+            <span class="host">{{ log.host }}</span>
+            <span class="status-badge {% if log.is_ok %}status-ok{% else %}status-domn{% endif %}">
+              {{ log.status }}
+            </span>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="p-3 text-center text-muted">
+          No connectivity logs available
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="text-center text-muted small">
+      Last updated: {{ last_updated }} | Driver Network Health Monitor
+         Author: Abdelkader
+    </div>
+    
+  </div>
+
+  <script>
+    // Auto-refresh every 10 seconds
+    setTimeout(() => {
+      window.location.reload();
+    }, 10000);
+  </script>
+</body>
+
+</html>
